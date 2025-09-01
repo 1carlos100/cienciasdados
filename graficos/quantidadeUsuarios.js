@@ -1,31 +1,26 @@
-const url = "https://raw.githubusercontent.com/silviosnjr/CienciaDeDados-CriandoGraficosDinamicosComJavaScript/Aula01/transporte/transporte-dados-globais.json";
-
-async function vizualizarInformacoesGlobais() {
+async function quantidadeUsuario() {
+    const url = "https://raw.githubusercontent.com/silviosnjr/CienciaDeDados-CriandoGraficosDinamicosComJavaScript/refs/heads/Aula01/trabalho/trabalho-tipos-de-ocupacao.json"
     try {
-        const resposta = await fetch(url);
-        if (!resposta.ok) throw new Error("Não foi possível buscar os dados.");
-        const dados = await resposta.json();
+        const res = await fetch(url)
+        const dados = await res.json()
+        const nomeDosPostos = Object.keys(dados)
+        const quantidadeTrabalhadores = Object.values(dados)
 
-        // Protege contra dados faltando
-        const pessoasMundo = dados.total_pessoas_mundo ? dados.total_pessoas_mundo / 1e9 : 0;
-        const trabalhadoresMundo = dados.total_trabalhadores_mundo ? dados.total_trabalhadores_mundo / 1e9 : 0;
-        // Se valor for string, converte corretamente
-        let tempoMedio = Number(dados.tempo_medio_deslocamento_para_trabalho) || 0;
-        const tempoDesTrabalho = Math.floor(tempoMedio);
-        const minutos = Math.round((tempoMedio - tempoDesTrabalho) * 60);
+        const data = [
+            {
+                x: nomeDosPostos,
+                y: quantidadeTrabalhadores,
+                type: 'bar'
+            }
+        ]
 
-        const paragrafo = document.createElement('p');
-        paragrafo.classList.add('graficos-container_texto');
-
-        paragrafo.innerHTML = `O mundo tem <span>${pessoasMundo.toFixed(2)}</span> bilhões de pessoas. Destas, aproximadamente <span>${trabalhadoresMundo.toFixed(2)}</span> bilhões são trabalhadores. O tempo médio de deslocamento para o trabalho é <span>${tempoDesTrabalho}</span> horas e <span>${minutos}</span> minutos.`;
-
-        const container = document.getElementById('graficos-container');
-        if (container) {
-            container.appendChild(paragrafo);
-        } else {
-            console.warn("Elemento #graficos-container não encontrado.");
-        }
-    } catch (e) {
-        console.error("Erro ao buscar ou processar dados globais:", e);
+        const grafico = document.createElement('div')
+        grafico.className = 'grafico'
+        document.getElementById('graficos-container').appendChild(grafico)
+        Plotly.newPlot(grafico, data)
+    } catch (error) {
+        console.error("Erro ao buscar dados:", error)
     }
 }
+
+quantidadeUsuario()
