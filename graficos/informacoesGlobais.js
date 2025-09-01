@@ -1,23 +1,31 @@
-const url = "https://raw.githubusercontent.com/silviosnjr/CienciaDeDados-CriandoGraficosDinamicosComJavaScript/refs/heads/Aula01/transporte/transporte-dados-globais.json"
+const url = "https://raw.githubusercontent.com/silviosnjr/CienciaDeDados-CriandoGraficosDinamicosComJavaScript/Aula01/transporte/transporte-dados-globais.json";
 
 async function vizualizarInformacoesGlobais() {
     try {
-        const resposta = await fetch(url)
-        const dados = await resposta.json()
+        const resposta = await fetch(url);
+        if (!resposta.ok) throw new Error("Não foi possível buscar os dados.");
+        const dados = await resposta.json();
 
-        const pessoasMundo = (dados.total_pessoas_mundo / 1e9)
-        const trabalhadoresMundo = (dados.total_trabalhadores_mundo / 1e9)
-        const tempoDesTrabalho = parseInt(dados.tempo_medio_deslocamento_para_trabalho)
-        const minutos = Math.round((dados.tempo_medio_deslocamento_para_trabalho - tempoDesTrabalho) * 60)
+        // Protege contra dados faltando
+        const pessoasMundo = dados.total_pessoas_mundo ? dados.total_pessoas_mundo / 1e9 : 0;
+        const trabalhadoresMundo = dados.total_trabalhadores_mundo ? dados.total_trabalhadores_mundo / 1e9 : 0;
+        // Se valor for string, converte corretamente
+        let tempoMedio = Number(dados.tempo_medio_deslocamento_para_trabalho) || 0;
+        const tempoDesTrabalho = Math.floor(tempoMedio);
+        const minutos = Math.round((tempoMedio - tempoDesTrabalho) * 60);
 
-        const paragrafo = document.createElement('p')
-        paragrafo.classList.add('graficos-container_texto')
+        const paragrafo = document.createElement('p');
+        paragrafo.classList.add('graficos-container_texto');
 
-        paragrafo.innerHTML = `O mundo tem <span>${pessoasMundo.toFixed(2)}</span> bilhões de pessoas, dessas pessoas, aproximadamente <span>${trabalhadoresMundo.toFixed(2)}</span> bilhões estão empregadas e passam em média <span>${tempoDesTrabalho} horas e ${minutos} minutos</span> se deslocando para o trabalho.`
+        paragrafo.innerHTML = `O mundo tem <span>${pessoasMundo.toFixed(2)}</span> bilhões de pessoas. Destas, aproximadamente <span>${trabalhadoresMundo.toFixed(2)}</span> bilhões são trabalhadores. O tempo médio de deslocamento para o trabalho é <span>${tempoDesTrabalho}</span> horas e <span>${minutos}</span> minutos.`;
 
-        const container = document.getElementById('graficos-container')
-        container.appendChild(paragrafo)
+        const container = document.getElementById('graficos-container');
+        if (container) {
+            container.appendChild(paragrafo);
+        } else {
+            console.warn("Elemento #graficos-container não encontrado.");
+        }
     } catch (e) {
-        console.error("Erro ao buscar ou processar dados globais:", e)
+        console.error("Erro ao buscar ou processar dados globais:", e);
     }
 }
