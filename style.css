@@ -1,10 +1,10 @@
-@import url("https://fonts.googleapis.com/css2?family=Bai+Janjuree&dis");
+@import url('https://fonts.googleapis.com/css2?family=Bai+Jamjuree&display=swap');
 
 :root {
     --bg-color: #222831;
     --primary-color: #DDDDDD;
-    --secundary-color: #F05454;
-    --font: Bai Jamjuree;
+    --secondary-color: #F05454;
+    --font: 'Bai Jamjuree', sans-serif;
 }
 body {
     background-color: var(--bg-color);
@@ -36,14 +36,14 @@ nav a {
 }
 nav a:hover {
     text-decoration: underline;
-    transform: scale(0,90);
+    transform: scale(0.9);
     transition: transform 0.1s;
 }
 .graficos-container_texto {
     font-size: 1.3rem;
     text-align: center;
     padding: 2rem;
-    border: var(--secundary-color) solid 2px;
+    border: var(--secondary-color) solid 2px;
 }
 #grafico-container {
     margin: 5rem;
@@ -61,5 +61,5 @@ footer {
 span{
     font-weight: bold;
     color: white;
-    background-color: var(--secundary-color);
+    background-color: var(--secondary-color);
 }
