@@ -1,27 +1,23 @@
-async function quantidadeUsuario() {
-    const url = "https://raw.githubusercontent.com/silviosnjr/CienciaDeDados-CriandoGraficosDinamicosComJavaScript/refs/heads/Aula01/trabalho/trabalho-tipos-de-ocupacao.json"
+const url = "https://raw.githubusercontent.com/silviosnjr/CienciaDeDados-CriandoGraficosDinamicosComJavaScript/refs/heads/Aula01/transporte/transporte-dados-globais.json"
+
+async function vizualizarInformacoesGlobais() {
     try {
-        const res = await fetch(url)
-        const dados = await res.json()
-        const nomeDosPostos = Object.keys(dados)
-        const quantidadeTrabalhadores = Object.values(dados)
+        const resposta = await fetch(url)
+        const dados = await resposta.json()
 
-        const data = [
-            {
-                x: nomeDosPostos,
-                y: quantidadeTrabalhadores,
-                type: 'bar'
-            }
-        ]
+        const pessoasMundo = (dados.total_pessoas_mundo / 1e9)
+        const trabalhadoresMundo = (dados.total_trabalhadores_mundo / 1e9)
+        const tempoDesTrabalho = parseInt(dados.tempo_medio_deslocamento_para_trabalho)
+        const minutos = Math.round((dados.tempo_medio_deslocamento_para_trabalho - tempoDesTrabalho) * 60)
 
-        const grafico = document.createElement('div')
-        grafico.className = 'grafico'
-        document.getElementById('graficos-container').appendChild(grafico)
-        Plotly.newPlot(grafico, data)
-    } catch (error) {
-        console.error("Erro ao buscar dados:", error)
+        const paragrafo = document.createElement('p')
+        paragrafo.classList.add('graficos-container_texto')
+
+        paragrafo.innerHTML = `O mundo tem <span>${pessoasMundo.toFixed(2)}</span> bilhões de pessoas, dessas pessoas, aproximadamente <span>${trabalhadoresMundo.toFixed(2)}</span> bilhões estão empregadas e passam em média <span>${tempoDesTrabalho} horas e ${minutos} minutos</span> se deslocando para o trabalho.`
+
+        const container = document.getElementById('graficos-container')
+        container.appendChild(paragrafo)
+    } catch (e) {
+        console.error("Erro ao buscar ou processar dados globais:", e)
     }
 }
-
-quantidadeUsuario()
-
