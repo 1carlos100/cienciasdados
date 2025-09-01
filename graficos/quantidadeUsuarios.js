@@ -21,4 +21,3 @@ async function vizualizarInformacoesGlobais() {
         console.error("Erro ao buscar ou processar dados globais:", e)
     }
 }
-
