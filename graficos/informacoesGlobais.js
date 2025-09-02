@@ -14,14 +14,20 @@ async function vizualizarInformacoesGlobais() {
         const tempoDesTrabalho = Math.floor(tempoMedio);
         const minutos = Math.round((tempoMedio - tempoDesTrabalho) * 60);
 
+        // Cria o texto principal
         const paragrafo = document.createElement('p');
         paragrafo.classList.add('graficos-container_texto');
+        paragrafo.innerHTML = `O mundo tem <span>${pessoasMundo.toFixed(2)}</span> bilhões de pessoas. Destas, aproximadamente <span>${trabalhadoresMundo.toFixed(2)}</span> bilhões são trabalhadores. O tempo médio de deslocamento para o trabalho global é de <span>${tempoDesTrabalho}</span> horas e <span>${minutos}</span> minutos por dia.`;
 
-        paragrafo.innerHTML = `O mundo tem <span>${pessoasMundo.toFixed(2)}</span> bilhões de pessoas. Destas, aproximadamente <span>${trabalhadoresMundo.toFixed(2)}</span> bilhões são trabalhadores. O tempo médio de deslocamento para o trabalho é <span>${tempoDesTrabalho}</span> horas e <span>${minutos}</span> minutos.`;
+        // Cria o texto final sobre o mundo (garante que sempre apareça no final)
+        const paragrafoFinal = document.createElement('p');
+        paragrafoFinal.classList.add('graficos-container_texto');
+        paragrafoFinal.innerHTML = `Esses dados mostram o panorama global do deslocamento para trabalho no mundo.`;
 
         const container = document.getElementById('graficos-container');
         if (container) {
             container.appendChild(paragrafo);
+            container.appendChild(paragrafoFinal); // adiciona o texto final ao fim do container
         } else {
             console.warn("Elemento #graficos-container não encontrado.");
         }
